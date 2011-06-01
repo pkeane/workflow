@@ -239,6 +239,9 @@ class Dase_Handler_Faculty extends Dase_Handler
 						$f->getVersions();
 						$set[] = $f;
 				}
+				if (Dase_DBO_Watchlist::check($this->db,$this->user->eid,$fac->eid)) {
+						$t->assign('on_watchlist',1);
+				}
 				$t->assign('files',$set);
 				$r->renderResponse($t->fetch('faculty.tpl'));
 		}

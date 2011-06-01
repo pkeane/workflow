@@ -2,6 +2,10 @@ var Dase = {};
 
 $(document).ready(function() {
 	Dase.initDelete('topMenu');
+	Dase.initDelete('facinfo');
+	Dase.initDelete('faculty');
+	Dase.initPut('facinfo');
+	Dase.initPut('faculty');
 	Dase.initPut('lines');
 	Dase.initToggle('lines');
 	Dase.initToggle('target');

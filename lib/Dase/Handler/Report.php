@@ -32,6 +32,7 @@ class Dase_Handler_Report extends Dase_Handler
 								}
 						}
 				}
+				$this->user->getWatchlist();
 				$t->assign('set',$set);
 				$r->renderResponse($t->fetch('report_need_cv.tpl'));
 		}

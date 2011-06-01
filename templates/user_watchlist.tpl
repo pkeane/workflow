@@ -1,11 +1,9 @@
 {extends file="layout.tpl"}
 
 {block name="content"}
-<h1>Reports</h1>
-
-
-<h2>List of Faculty without complete CV on file ({$set|@count})</h2>
-
+<div>
+	<h1>watchlist for {$request->user->name}</h1>
+</div>
 <table id="faculty">
 	<tr>
 		<th>name</th>
@@ -14,7 +12,6 @@
 		<th>college</th>
 		<th>tenure status</th>
 		<th>CV</th>
-		<th></th>
 	</tr>
 	{foreach item=fac from=$set}
 
@@ -37,19 +34,9 @@
 		<td>
 			{if $fac->have_cv}&#10003;{/if}	
 		</td>
-		<td>
-			{if in_array($fac->eid,$request->user->watchlist|@array_keys)}
-			<a href="user/{$request->user->eid}/watchlist/{$fac->eid}" class="delete">unwatch</a>
-			{else}
-			<a href="user/{$request->user->eid}/watchlist/{$fac->eid}" class="put">watch</a>
-			{/if}
-		</td>
 	</tr>
 
 	{/foreach}
 </table>
-
-
-
 
 {/block}
