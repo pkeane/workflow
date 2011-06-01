@@ -1,0 +1,306 @@
+body {
+	font-family: "Verdana", sans-serif;
+	background-color: #fff;
+}
+
+p {
+	margin: 10px 0;
+}
+
+#wordmark {
+	background:url("../images/wordMarkBkg.png") repeat-x scroll center bottom #FFFFFF;
+	text-align: center;
+}
+
+#wordmark img {
+	margin-bottom: -3px;
+}
+
+div#container {
+	margin: 0px auto;
+	width: 960px;
+}
+
+div#header {
+	background-color: #fff;
+	color: #000;
+	margin: 0px;
+	padding: 0px;
+	/*
+	border: 1px solid #666;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	*/
+
+}
+
+h1, h2, h3, h4 {
+	font-family: Georgia, serif;
+}
+
+h3.msg {
+	color: #900;
+	margin: 10px 0 0 0;
+}
+
+div#header h1 {
+	font-size: 60px;
+	font-weight: normal;
+	float: left;
+}
+
+div#header h4 {
+	font-weight: normal;
+	float: right;
+	margin-right: 6px;
+	margin-top: 10px;
+}
+
+a.delete {
+	color:#c00;
+}
+
+div#main {
+	margin 0;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 15px 20px;
+}
+
+#footer {
+	margin: 6px 0;
+} 
+
+#footer div.brand {
+	font-family: Arial, sans-serif;
+	padding: 10px 10px 10px 120px;
+	color: #999;
+	background-color: #ccc;
+	height: 40px;
+	vertical-align: bottom;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 15px 15px 15px 15px;
+}
+#footer a {
+	color:#666;
+}
+#footer table.logo {
+	float: left;
+	margin: 4px 2px 0 0;
+	border-spacing:1px;
+}
+#footer table.logo td {
+	padding: 0;
+	width: 5px;
+	height: 5px;
+	line-height: 5px;
+	font-size: 5px;
+	background-color: #777;
+}
+
+#footer div.label {
+	letter-spacing: -1px;
+	padding: 0;
+	font-size: 28px;
+	line-height: 40px;
+}
+#footer div.label strong {
+	font-size: 40px;
+}
+
+ul {
+	margin: 10px 0;
+}
+
+li  {
+	margin: 5px 0;
+}
+
+
+input.delete {
+	float: right;
+	margin-right: 0px;
+}
+
+input.delete:hover {
+	background-color: #c00;
+	color: #fff;
+}
+
+div.controls {
+	float: right;
+	margin: 6px 0;
+}
+
+dl {
+	margin: 10px 0;
+}
+dt {
+	background-color: #eee;
+	float: left; 
+	width: 140px; 
+	text-align: right; 
+	font-weight: bold; 
+	padding: 2px 10px;
+	margin-bottom: 2px;
+	color: #666; 
+}
+dd { 
+	margin: 0 0 2px 160px; 
+	padding: 2px 10px; 
+	min-height: 20px;
+}
+
+label {
+	margin-top: 10px;
+	display: block;
+	color: #666;
+	font-weight: normal;
+	font-size: 11px;
+}
+
+form {
+	margin-bottom: 8px;
+}
+
+div.section {
+	margin: 5px 0;
+	padding: 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+div.section h3 {
+	font-family: verdana, sans-serif;
+}
+
+div.files {
+	/* greenish */
+	background-color: #e2f2ca;
+	/* reddish */
+	background-color: #f2e2ca;
+	background-color: #eee;
+}
+
+div.cvs {
+	background-color: #f8f3d3;
+}
+
+div.diff {
+	background-color: #ddf3f6;
+	background-color: #eee;
+	background-color: #f2e2ca;
+}
+
+div.lines {
+	background-color: #f2e2ca;
+	background-color: #e2f2ca;
+	padding: 20px;
+}
+
+div.lines li {
+	padding: 8px;
+	padding-bottom: 2px;
+	background-color: #e2d2ba;
+	background-color: #fff0d8;
+	background-color: #f6fff6;
+	min-height: 30px;
+}
+
+div.lines li.creative {
+	background-color: #fff0d8;
+}
+
+div.lines li.section {
+	background-color: #ddd;
+}
+
+div.lines li div.line {
+	margin-left: 180px;
+}
+
+div.lines li div.operators {
+	float: left;
+}
+
+div.lines li div.operators a {
+	font-size: 12px;
+}
+
+/*
+div.lines li div.operators a:hover {
+	font-size: 16px;
+}
+	*/
+
+div.filetext {
+	background-color: #ddf3f6;
+	background-color: #eee;
+	background-color: #f2e2ca;
+	background-color: #e2f2ca;
+}
+
+div.cv {
+	/* light blue */
+	background-color: #ddf3f6;
+	/* light yellow */
+	background-color: #f8f3d3;
+}
+div.versions {
+	background-color: #f2e2ca;
+	background-color: #e2e9f5;
+}
+
+div.versionform {
+	background-color: #f2e2ca;
+	background-color: #e2e9f5;
+}
+
+textarea {
+	width: 100%;
+	height: 400px;
+}
+
+div.cv form {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.or {
+	margin: 15px 0;
+}
+
+.hinfo {
+	font-weight: normal;
+	font-size: 11px;
+}
+
+div.cvmeta {
+	display: none;
+}
+
+textarea.line_text {
+	height: 80px;
+}
+
+table#faculty {
+	margin-top: 20px;
+	width: 100%;
+}
+table#faculty th {
+	text-align: left;
+}
+table#faculty td {
+	background-color: red;
+	background-color: #eef3f6;
+	padding: 4px;
+	text-align: left;
+}
