@@ -28,9 +28,23 @@
 		<p>
 		<label>note:</label>
 		<input type="text" name="note">
+		<br>
+		<select name="code">
+			<option>workflow stages:</option>
+			<option>removed all non-citation data</option>
+			<option>removed all non-pubs citations</option>
+			<option>clean formatting</option>
+		</select>
 		</p>
 		<input type="submit" value="save new version">
 		<input type="submit" value="remove line breaks and save new version" name="remove">
+		<p>
+		<input type="submit" value="add line breaks and save new version" name="add_space">
+		</p>
+		<p>
+		<input type="submit" value="remove lines shorter than:" name="delete_short">
+		<input type="text" size="3" name="shortline_length"> characters
+		</p>
 		<!--
 		<p class="select_submit">
 		<input type="submit" value="run macro">
@@ -51,7 +65,24 @@
 		-->
 		</p>
 	</form>
+
+	<h2>Preferred Version</h2>
+	{if $v->is_preferred}
+	[This is the preferred version for purposes of citation deduplication]
+	{else}
+	<form method="post" action="faculty/{$fac->eid}/file/{$file->id}/version/{$v->id}/preferred">
+		<p>
+		<input type="submit" value="flag this as the preferred version for purposes of citation deduplication">
+		</p>
+	</form>
+	{/if}
+
+
+
+
+
 	{if $v->linebreaks_removed}
+
 	{if !$v->has_citations}
 
 	<div class="controls">

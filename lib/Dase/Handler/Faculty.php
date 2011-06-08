@@ -4,12 +4,16 @@ class Dase_Handler_Faculty extends Dase_Handler
 {
 		public $resource_map = array(
 				'{eid}' => 'faculty',
+				'{eid}/problem' => 'faculty_problem',
 				'{eid}/file/{id}' => 'file',
 				'{eid}/file/{id}/versioner' => 'versioner',
 				'{eid}/file/{id}/metadata' => 'metadata',
+				'{eid}/file/{id}/problem' => 'problem',
+				'{eid}/file/{id}/preferred' => 'preferred',
 				'{eid}/file/{uploaded_file_id}/version/{id}' => 'version',
 				'{eid}/file/{uploaded_file_id}/version/{id}/lines' => 'lines',
 				'{eid}/file/{uploaded_file_id}/version/{id}/diff' => 'diff',
+				'{eid}/file/{uploaded_file_id}/version/{id}/preferred' => 'preferred_version',
 		);
 
 		protected function setup($r)
@@ -35,6 +39,14 @@ class Dase_Handler_Faculty extends Dase_Handler
 				$t->assign('lines',$v->getLines($r->get('show_hidden')));
 				$t->assign('show_hidden',$r->get('show_hidden'));
 				$r->renderResponse($t->fetch('lines.tpl'));
+		}
+
+		public function postToPreferredVersion($r)
+		{
+				$v = new Dase_DBO_Version($this->db);
+				$v->load($r->get('id'));
+				$v->makePreferred();
+				$r->renderRedirect('faculty/'.$r->get('eid').'/file/'.$r->get('uploaded_file_id').'/version/'.$v->id);
 		}
 
 		public function postToLines($r)
@@ -151,6 +163,26 @@ class Dase_Handler_Faculty extends Dase_Handler
 				//if text, it is spawned from a version
 				//else it is a new version of undeited text
 				if ($text) {
+						if ($r->get('delete_short')) {
+								$new_lines = array();
+								foreach (preg_split('/(\r\n|\r|\n)/', $text) as $line) {
+										$this_line = trim($line);
+										if ($this_line && strlen($this_line) >= $r->get('shortline_length')) {
+												$new_lines[] = $this_line;
+										}
+								}
+								$text = join("\n\n",$new_lines);
+						}
+						if ($r->get('add_space')) {
+								$new_lines = array();
+								foreach (preg_split('/(\r\n|\r|\n)/', $text) as $line) {
+										$this_line = trim($line);
+										if ($this_line) {
+												$new_lines[] = $this_line;
+										}
+								}
+								$text = join("\n\n",$new_lines);
+						}
 						if ($r->get('remove')) {
 								$i = 0;
 								foreach (preg_split('/(\r\n|\r|\n)/', $text) as $line) {
@@ -201,6 +233,47 @@ class Dase_Handler_Faculty extends Dase_Handler
 				$file->update();
 
 				$r->renderRedirect('faculty/'.$fac->eid.'/file/'.$file->id);
+		}
+
+		public function postToProblem($r) 
+		{
+				$fac = new Dase_DBO_Faculty($this->db);
+				$fac->eid = $r->get('eid');
+				$fac->findOne();
+
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->load($r->get('id'));
+				$file->problem_note = $r->get('problem_note');
+				if ($file->problem_note) {
+						$file->has_problem = 1;
+				} else {
+						$file->has_problem = 0;
+				}
+				$file->update();
+				$r->renderRedirect('faculty/'.$fac->eid.'/file/'.$file->id);
+		}
+
+		public function postToFacultyProblem($r) 
+		{
+				$fac = new Dase_DBO_Faculty($this->db);
+				$fac->eid = $r->get('eid');
+				$fac->findOne();
+				$fac->problem_note = $r->get('problem_note');
+				if ($fac->problem_note) {
+						$fac->has_problem = 1;
+				} else {
+						$fac->has_problem = 0;
+				}
+				$fac->update();
+				$r->renderRedirect('faculty/'.$fac->eid);
+		}
+
+		public function postToPreferred($r) 
+		{
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->load($r->get('id'));
+				$file->makePreferred();
+				$r->renderRedirect('faculty/'.$r->get('eid').'/file/'.$file->id);
 		}
 
 		public function deleteVersion($r) 

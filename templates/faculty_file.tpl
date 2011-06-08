@@ -33,16 +33,59 @@
 </p>
 </form>
 
+<div class="controls">
+<a href="http://dev.laits.utexas.edu/publications/workflow/faculty/{$fac->eid}/file/{$file->id}">view on dev</a> |
+<a href="http://www.laits.utexas.edu/publications/workflow/faculty/{$fac->eid}/file/{$file->id}">view on www</a> 
+	<form method="get" action="faculty/{$fac->eid}/file/{$file->id}">
+<input type="hidden" name="reconvert" value="1">
+		<input type="submit" value="reconvert file">
+	</form>
 
 {if $request->user->eid == $file->uploaded_by}
 {if 0 == $file->versions|@count}
-<div class="controls">
 	<form method="delete" action="faculty/{$fac->eid}/file/{$file->id}">
 		<input type="submit" value="delete this file">
 	</form>
+{/if}
+{/if}
 </div>
+
+{if $file->status == 'complete'}
+<h2>preferred CV</h2>
+{if $file->is_preferred}
+[This is the preferred CV for {$fac->eid}]
+{else}
+<form method="post" action="faculty/{$fac->eid}/file/{$file->id}/preferred">
+<p>
+<input type="submit" value="flag this as the preferred CV for {$fac->eid}">
+</p>
+</form>
 {/if}
 {/if}
+
+<h2>report a problem</h2>
+
+<form method="post" action="faculty/{$fac->eid}/file/{$file->id}/problem">
+<p>
+<label>Problem Brief Description<span class="current">[{$file->problem_note}]</span></label>
+<input type="text" name="problem_note" value="{$file->problem_note}">
+<br>
+<select name="problem_code">
+<option>problem codes:</option>
+<option>EDIT_PAIN</option>
+<option>EXT_DB</option>
+<option>GARBLED_TEXT</option>
+<option>MISASSIGNED</option>
+<option>MISC</option>
+<option>NO_TEXT</option>
+<option>OCR_FAILS</option>
+<option>OCR_PAIN</option>
+<option>OCR</option>
+<option>URL_UPLOAD</option>
+</select>
+</p>
+<input type="submit" value="flag problem">
+</form>
 
 <div class="clear"></div>
 </div>
@@ -63,6 +106,7 @@
 	{if $v->has_citations} |
 	<a href="faculty/{$fac->eid}/file/{$v->uploaded_file_id}/version/{$v->id}/lines">lines</a>
 {/if}
+	{if $v->is_preferred} | <span class="flag">preferred</span>{/if}
 	</li>
 	{/foreach}
 </ul>

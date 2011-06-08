@@ -27,6 +27,20 @@ class Dase_DBO_UploadedFile extends Dase_DBO_Autogen_UploadedFile
 				return parent::__get($key);
 		}
 
+		public function makePreferred()
+		{
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->eid = $this->eid;
+				foreach ($file->findAll(1) as $f) {
+						if ($f->id == $this->id) {
+								$f->is_preferred = 1;
+						} else {
+								$f->is_preferred = 0;
+						}
+						$f->update();
+				}
+		}
+
 		public function getVersions()
 		{
 				$v = new Dase_DBO_Version($this->db);

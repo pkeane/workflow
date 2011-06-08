@@ -4,7 +4,7 @@
 <h1>Reports</h1>
 
 
-<h2>List of Faculty without complete CV on file ({$set|@count})</h2>
+<h2>List of Faculty without no status on at least 1 file ({$set|@count})</h2>
 
 <table id="faculty">
 	<tr>

@@ -13,7 +13,7 @@ class Dase_DBO_Autogen_UploadedFile extends Dase_DBO
 {
 	public function __construct($db,$assoc = false) 
 	{
-		parent::__construct($db,'uploaded_file', array('name','orig_name','eid','uploaded','upload_mime','uploaded_by','date_on_cv','status','note','rawtext','rawtext_size','rawtext_md5','converted','workflow_state'));
+		parent::__construct($db,'uploaded_file', array('name','orig_name','eid','uploaded','upload_mime','upload_note','uploaded_by','date_on_cv','other_updated','status','note','rawtext','rawtext_size','rawtext_md5','converted','workflow_state','url','problem_note','has_problem','is_preferred'));
 		if ($assoc) {
 			foreach ( $assoc as $key => $value) {
 				$this->$key = $value;

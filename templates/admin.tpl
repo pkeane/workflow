@@ -9,6 +9,7 @@
 		<li><a href="directory">add a user</a></li>
 		<li><a href="admin/users">list users</a></li>
 		<li><a href="admin/reports">reports</a></li>
+		<li><a href="admin/tasks">tasks</a></li>
 		{/if}
 	</ul>
 </div>

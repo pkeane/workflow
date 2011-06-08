@@ -15,6 +15,8 @@ $(document).ready(function() {
 	Dase.initSortable('target');
 	Dase.initUserPrivs();
 	Dase.initFormDelete();
+	Dase.initProbCodeInsert();
+	Dase.initCodeInsert();
 });
 
 Dase.initToggle = function(id) {
@@ -24,6 +26,20 @@ Dase.initToggle = function(id) {
 		$('#'+tar).toggle();
 		return false;
 	});	
+};
+
+Dase.initProbCodeInsert = function() {
+	$('select[name="problem_code"]').change( function() {
+		var code = $(this).find("option:selected").text();
+		$('input[name="problem_note"]').attr('value',code);
+	});
+};
+
+Dase.initCodeInsert = function() {
+	$('select[name="code"]').change( function() {
+		var code = $(this).find("option:selected").text();
+		$('input[name="note"]').attr('value',code);
+	});
 };
 
 Dase.initFormDelete = function() {

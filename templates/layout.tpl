@@ -15,7 +15,8 @@
 	<h1><a href="home">{$main_title}</a></h1>
 	<h4 id="topMenu">
 		<a href="home">home</a> |
-		<a href="user/watchlist">watchlist</a>
+		<a href="user/watchlist">watchlist</a> |
+		<a href="upload/search">upload</a>
 		{if $request->user}	|
 		{if $request->user->is_admin}
 		<a href="admin">admin</a> |

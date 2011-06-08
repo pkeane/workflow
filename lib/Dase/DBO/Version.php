@@ -38,4 +38,19 @@ class Dase_DBO_Version extends Dase_DBO_Autogen_Version
 
 		}
 
+		public function makePreferred()
+		{
+				$ver = new Dase_DBO_Version($this->db);
+				$ver->uploaded_file_id = $this->uploaded_file_id;
+				foreach ($ver->findAll(1) as $v) {
+						if ($v->id == $this->id) {
+								$v->is_preferred = 1;
+						} else {
+								$v->is_preferred = 0;
+						}
+						$v->update();
+				}
+		}
+
+
 }

@@ -304,3 +304,19 @@ table#faculty td {
 	padding: 4px;
 	text-align: left;
 }
+
+div.cvmeta h2 {
+	margin-top: 20px;
+}
+div.versionform h2 {
+	margin-top: 20px;
+}
+
+span.flag {
+	font-weight: bold;
+	color: #60c;
+}
+
+input[name="note"] {
+	width: 300px;
+}
