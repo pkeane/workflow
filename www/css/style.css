@@ -136,7 +136,7 @@ input.delete:hover {
 
 div.controls {
 	float: right;
-	margin: 6px 0;
+	margin: 0;
 }
 
 dl {
@@ -144,16 +144,19 @@ dl {
 }
 dt {
 	background-color: #eee;
+	/*
 	float: left; 
-	width: 140px; 
 	text-align: right; 
+	width: 140px; 
+	*/
 	font-weight: bold; 
 	padding: 2px 10px;
+	margin-top: 30px;
 	margin-bottom: 2px;
 	color: #666; 
 }
 dd { 
-	margin: 0 0 2px 160px; 
+	margin: 8px 0; 
 	padding: 2px 10px; 
 	min-height: 20px;
 }
@@ -209,8 +212,6 @@ div.lines {
 div.lines li {
 	padding: 8px;
 	padding-bottom: 2px;
-	background-color: #e2d2ba;
-	background-color: #fff0d8;
 	background-color: #f6fff6;
 	min-height: 30px;
 }
@@ -319,4 +320,90 @@ span.flag {
 
 input[name="note"] {
 	width: 300px;
+}
+
+a.edit {
+	color: #900;
+	font-weight: bold;
+}
+
+a.linesLink {
+	color: #900;
+	font-weight: bold;
+}
+
+ul.poss_dups li {
+	padding: 8px;
+	margin: 20px 0;
+	background-color: #eee;
+}
+
+ul.poss_dups li p {
+	padding: 0 5px;
+}
+
+ul.poss_dups li div.orig {
+	padding: 5px;
+	background-color: #ddd;
+}
+
+a.dup {
+	color: #a00;
+}
+a.no_dup {
+	color: #090;
+}
+a.not_cite {
+	color: #d70;
+}
+
+span.lev {
+	font-size: 10px;
+	color: #00a;
+	margin-left: 20px;
+}
+
+p.dim {
+	color: #999;
+}
+
+li.highlight {
+}
+
+ul#poss_dups {
+	margin: 5px 0;
+}
+
+div.lines li.highlight {
+	background-color: #ffa;
+}
+div.lines li.hidden {
+	background-color: #aaa;
+}
+
+ul#poss_dups li {
+	background-color: #fff;
+	border:1px solid #999;
+}
+
+a.toggle, a.show_line_form {
+	font-size: 11px;
+	color: #800;
+}
+
+p.prob_code {
+	margin: 0px;
+	margin-bottom: 12px;
+	color: #666;
+	font-weight: bold;
+}
+
+a.diff_link {
+	font-size: 11px;
+	color: #00c;
+}
+
+a.op {
+	font-size: 11px;
+	color: #00c;
 }

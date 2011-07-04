@@ -25,7 +25,7 @@
 	{$file->versions|@count} version(s) |
 	<a href="file/{$fac->eid}/{$file->name}/download">download</a>
 	{if $file->is_preferred}
-	| is preferred
+	| <span class="flag">preferred</span>
 	{/if}
 	</li>
 	{/foreach}
@@ -41,13 +41,39 @@
 <br>
 <select name="problem_code">
 <option>problem codes:</option>
-<option>FAKE_FAC</option>
 <option>NO_CV</option>
+<option>READY</option>
+<option>NOT_READY</option>
 </select>
 </p>
 <input type="submit" value="flag problem">
 </form>
+
+{if $pref_versions|@count}
+<h2>versions marked preferred</h2>
+
+
+<ul>
+	{foreach item=v from=$pref_versions}
+	<li>
+	<a href="faculty/{$fac->eid}/file/{$v->uploaded_file_id}/version/{$v->id}">{$v->text_md5|truncate:6:''} (saved {$v->ago} by {$v->edited_by})</a> 
+	{if $v->has_citations} |
+	<a href="faculty/{$fac->eid}/file/{$v->uploaded_file_id}/version/{$v->id}/lines" class="linesLink">lines</a>
+	{/if}
+	{if $v->is_from_pref_cv} 
+	| <span class="flag">from preferred cv</span>
+	{/if}
+	</li>
+	{/foreach}
+</ul>
+{if $pref_versions|@count > 1}
+<form action="faculty/{$fac->eid}/dedup" method="post">
+	<input type="submit" value="run deduplication routine">
+	<a href="faculty/{$fac->eid}/poss_dups">View Possible Duplicates</a>
+</form>
+{/if}
+	{/if}
+
+
 </div>
-
-
 {/block}

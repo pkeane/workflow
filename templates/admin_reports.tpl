@@ -35,10 +35,33 @@
 	<a href="report/null_status.csv?noten=1">as CSV</a>
 	</li>
 	<li>
+	<a href="report/problem_faculty">list Faculty with a reported problem</a> |
+	<a href="report/problem_faculty.csv">as CSV</a>
+	</li>
+	<li>
+	<a href="report/noprob_faculty">list Faculty with NO reported problem</a> |
+	<a href="report/noprob_faculty.csv">as CSV</a>
+	</li>
+	<li>
 	<a href="report/problem_files">list CVs with a reported problem</a>
 	</li>
 	<li>
-	<a href="report/problem_faculty">list Faculty with a reported problem</a>
+	<a href="report/misassigned_files">list CVs assigned to wrong EID</a>
+	</li>
+	<li>
+	<a href="report/faculty_poss_dups">list Faculty with possible duplicates</a>
+	<!--
+	<a href="report/noprob_faculty.csv">as CSV</a>
+	-->
+	</li>
+	<li>
+	<a href="report/faculty_no_pref_versions">list Faculty with NO preferred versions</a>
+	</li>
+	<li>
+	<a href="report/faculty_has_pref_versions">list Faculty with AT LEAST ONE preferred version</a>
+	</li>
+	<li>
+	<a href="report/recent_uploads">list recently uploaded CVs</a>
 	</li>
 </ul>
 {/block}

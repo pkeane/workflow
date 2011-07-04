@@ -1,8 +1,10 @@
 var Dase = {};
 
 $(document).ready(function() {
+	Dase.initHighlighting();
 	Dase.initDelete('topMenu');
 	Dase.initDelete('facinfo');
+	Dase.initDelete('poss_dups');
 	Dase.initDelete('faculty');
 	Dase.initPut('facinfo');
 	Dase.initPut('faculty');
@@ -17,6 +19,8 @@ $(document).ready(function() {
 	Dase.initFormDelete();
 	Dase.initProbCodeInsert();
 	Dase.initCodeInsert();
+	Dase.initPossDups();
+	Dase.initShowDups();
 });
 
 Dase.initToggle = function(id) {
@@ -28,10 +32,120 @@ Dase.initToggle = function(id) {
 	});	
 };
 
+Dase.initHighlighting = function() {
+	var hl = location.href.split('#')[1];
+	$('#'+hl).addClass('highlight');
+};
+
+
+Dase.initShowDups = function() {
+	$('#lines').find('a[class="show_line_form"]').click(function() {
+		var id = $(this).attr('id');
+		var tar = id.replace('toggle','target');
+		$('#'+tar).toggle();
+
+		var dupcount = $(this).attr('data-dupcount');
+		if (parseInt(dupcount)) {
+			var target = $(this).parents('li').find('ul');
+			var _o = {
+				'url': $(this).attr('href'),
+				'type':'GET',
+				'success': function(data) {
+					var dups = '';
+					for (var i=0; i<data.length; i++) {
+						var line= data[i];
+						dups += '<li>'+line.text+' <a href="line/'+line.id+'/diff" class="diff_link">[diff]</a></li>';
+					}
+					target.html(dups);
+					Dase.initGetDupDiff(target);
+				},
+				'error': function() {
+					alert('sorry, there was an error');
+				}
+			};
+			$.ajax(_o);
+		}
+		return false;
+	});	
+};
+
+Dase.initGetDupDiff = function(ul) {
+	ul.find('a[class="diff_link"]').click(function() {
+		var _o = {
+			'url': $(this).attr('href'),
+			'type':'GET',
+			'success': function(data) {
+				data = '<p class="diff">'+data+' <a href="#" class="op">[hide]</a></p>';
+				ul.after(data);
+				ul.parents('li').find('a[class="op"]').click(function() {
+					$(this).parents('p').remove();
+					return false;
+				});
+			},
+			'error': function() {
+				//pass
+			}
+		};
+		$.ajax(_o);
+		return false;
+	});
+};
+
+Dase.initPossDups = function() {
+	$('#poss_dups').find('a[class="dup"]').click(function() {
+		//if (confirm('are you sure it is a duplicate?')) {
+			var _o = {
+				'url': $(this).attr('href'),
+				'type':'POST',
+				'success': function() {
+					location.reload();
+				},
+				'error': function() {
+					alert('sorry, there was an error');
+				}
+			};
+			$.ajax(_o);
+		//}
+		return false;
+	});
+	$('#poss_dups').find('a[class="no_dup"]').click(function() {
+		//if (confirm('are you sure it is NOT a duplicate?')) {
+			var _o = {
+				'url': $(this).attr('href'),
+				'type':'POST',
+				'success': function() {
+					location.reload();
+				},
+				'error': function() {
+					alert('sorry, there was an error');
+				}
+			};
+			$.ajax(_o);
+		//}
+		return false;
+	});
+	$('#poss_dups').find('a[class="not_cite"]').click(function() {
+		//if (confirm('are you sure it is NOT a citation?')) {
+			var _o = {
+				'url': $(this).attr('href'),
+				'type':'POST',
+				'success': function() {
+					location.reload();
+				},
+				'error': function() {
+					alert('sorry, there was an error');
+				}
+			};
+			$.ajax(_o);
+		//}
+		return false;
+	});
+};
+
 Dase.initProbCodeInsert = function() {
 	$('select[name="problem_code"]').change( function() {
 		var code = $(this).find("option:selected").text();
-		$('input[name="problem_note"]').attr('value',code);
+		$(this).parents('form').find('input[name="problem_note"]').attr('value',code);
 	});
 };
 

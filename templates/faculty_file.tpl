@@ -50,7 +50,6 @@
 {/if}
 </div>
 
-{if $file->status == 'complete'}
 <h2>preferred CV</h2>
 {if $file->is_preferred}
 [This is the preferred CV for {$fac->eid}]
@@ -60,7 +59,6 @@
 <input type="submit" value="flag this as the preferred CV for {$fac->eid}">
 </p>
 </form>
-{/if}
 {/if}
 
 <h2>report a problem</h2>
@@ -104,7 +102,7 @@
 	<a href="faculty/{$fac->eid}/file/{$v->uploaded_file_id}/version/{$v->id}/diff?context=1">diff2</a>
 {/if}
 	{if $v->has_citations} |
-	<a href="faculty/{$fac->eid}/file/{$v->uploaded_file_id}/version/{$v->id}/lines">lines</a>
+	<a href="faculty/{$fac->eid}/file/{$v->uploaded_file_id}/version/{$v->id}/lines" class="linesLink">lines</a>
 {/if}
 	{if $v->is_preferred} | <span class="flag">preferred</span>{/if}
 	</li>

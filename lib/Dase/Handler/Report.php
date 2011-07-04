@@ -5,13 +5,168 @@ class Dase_Handler_Report extends Dase_Handler
 		public $resource_map = array(
 				'need_cv' => 'need_cv',
 				'null_status' => 'null_status',
+				'recent_uploads' => 'recent_uploads',
 				'problem_files' => 'problem_files',
+				'misassigned_files' => 'misassigned_files',
 				'problem_faculty' => 'problem_faculty',
+				'faculty_poss_dups' => 'faculty_poss_dups',
+				'noprob_faculty' => 'noprob_faculty',
+				'faculty_no_pref_versions' => 'faculty_no_pref_versions',
+				'faculty_has_pref_versions' => 'faculty_has_pref_versions',
+				'file/{id}' => 'file',
 		);
 
 		protected function setup($r)
 		{
 				$this->user = $r->getUser();
+				if ($this->user->is_admin) {
+						//ok
+				} else {
+						$r->renderError(401);
+				}
+		}
+
+		public function getFacultyNoPrefVersions($r)
+		{
+				$t = new Dase_Template($r);
+				$faculty = new Dase_DBO_Faculty($this->db);
+				$faculty->orderBy('college, dept, lastname');
+
+				$has_pref = array();
+				$versions = new Dase_DBO_Version($this->db);
+				foreach ($versions->find() as $v) {
+						$v = clone($v);
+						if ($v->is_preferred) {
+								$has_pref[$v->faculty_eid] = 1;
+								unset($v);
+						}
+				}
+
+				$set = array();
+				foreach ($faculty->findAll(1) as $fac) {
+						if (isset($has_pref[$fac->eid])) {
+								//$set[] = $fac;
+						} else {
+								$set[] = $fac;
+						}
+				}
+				$t->assign('facs',$set);
+				$r->renderResponse($t->fetch('report_fac_no_pref_versions.tpl'));
+		}
+
+		public function getFacultyHasPrefVersions($r)
+		{
+				$t = new Dase_Template($r);
+				$faculty = new Dase_DBO_Faculty($this->db);
+				$faculty->orderBy('college, dept, lastname');
+
+				$has_pref = array();
+				$versions = new Dase_DBO_Version($this->db);
+				foreach ($versions->find() as $v) {
+						$v = clone($v);
+						if ($v->is_preferred) {
+								if (!isset($has_pref[$v->faculty_eid])) {
+										$has_pref[$v->faculty_eid] = 0;
+								};
+								$has_pref[$v->faculty_eid] += 1;
+								unset($v);
+						}
+				}
+
+				$set = array();
+				foreach ($faculty->findAll(1) as $fac) {
+						if (isset($has_pref[$fac->eid])) {
+								$fac->pref_count = $has_pref[$fac->eid];
+								$set[] = $fac;
+						} else {
+								//$set[] = $fac;
+						}
+				}
+				$t->assign('facs',$set);
+				$r->renderResponse($t->fetch('report_fac_has_pref_versions.tpl'));
+		}
+
+		public function getFacultyPossDups($r)
+		{
+				$t = new Dase_Template($r);
+				$faculty = new Dase_DBO_Faculty($this->db);
+				$faculty->orderBy('college, dept, lastname');
+
+				$poss = array();
+				$lines = new Dase_DBO_Line($this->db);
+				foreach ($lines->find() as $l) {
+						$l = clone($l);
+						if ($l->is_poss_dup_of) {
+								$poss[$l->faculty_eid] = 1;
+								unset($l);
+						}
+				}
+
+				$set = array();
+				foreach ($faculty->findAll(1) as $fac) {
+						if (in_array($fac->eid,array_keys($poss))) {
+								$set[] = $fac;
+						}
+				}
+				$t->assign('facs',$set);
+				$r->renderResponse($t->fetch('report_fac_with_poss_dups.tpl'));
+		}
+
+		public function getFile($r)
+		{
+				$t = new Dase_Template($r);
+				$file = new Dase_DBO_UploadedFile($this->db);
+				if ($file->load($r->get('id'))) {
+						$fac = new Dase_DBO_Faculty($this->db);
+						$fac->eid = $file->eid;
+						$fac->findOne();
+						$t->assign('fac',$fac);
+						$t->assign('file',$file);
+						$r->renderResponse($t->fetch('report_file.tpl'));
+				} else {
+						$r->renderRedirect('report/misassigned_files');
+				}
+		}
+
+		public function getRecentUploads($r)
+		{
+				$t = new Dase_Template($r);
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->orderBy('uploaded DESC');
+				$file->setLimit(100);
+				$t->assign('files',$file->findAll());
+				$r->renderResponse($t->fetch('report_recent_uploads.tpl'));
+		}
+
+		public function postToFile($r)
+		{
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->load($r->get('id'));
+				$file->problem_note = $r->get('problem_note');
+				if ($file->problem_note) {
+						$file->has_problem = 1;
+				} else {
+						$file->has_problem = 0;
+				}
+				$file->eid = $r->get('eid');
+				$fac = new Dase_DBO_Faculty($this->db);
+				$fac->eid = $file->eid;
+				if ($fac->findOne()) {
+						$file->update();
+						$r->renderRedirect('faculty/'.$fac->eid.'/file/'.$file->id);
+				} else {
+						$params['msg'] = "No faculty with EID $fac->eid";
+						$r->renderRedirect('report/file/'.$file->id,$params);
+				}
+		}
+
+		public function deleteFile($r)
+		{
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->load($r->get('id'));
+				if ($file->delete()) {
+						$r->renderOk();
+				}
 		}
 
 		public function getNeedCv($r) 
@@ -102,6 +257,16 @@ class Dase_Handler_Report extends Dase_Handler
 		}
 
 
+		public function getMisassignedFiles($r)
+		{
+				$t = new Dase_Template($r);
+				$files = new Dase_DBO_UploadedFile($this->db);
+				$files->addWhere('problem_note','%MISASSIGNED%','like');
+				$t->assign('files',$files->findAll(1));
+				$r->renderResponse($t->fetch('report_misassigned_files.tpl'));
+		}
+
+
 		public function getProblemFaculty($r)
 		{
 				$t = new Dase_Template($r);
@@ -109,6 +274,43 @@ class Dase_Handler_Report extends Dase_Handler
 				$facs->has_problem = 1;
 				$t->assign('facs',$facs->findAll(1));
 				$r->renderResponse($t->fetch('report_problem_facs.tpl'));
+		}
+
+		public function getProblemFacultyCsv($r)
+		{
+				$t = new Dase_Template($r);
+				$facs = new Dase_DBO_Faculty($this->db);
+				$facs->has_problem = 1;
+				$t->assign('facs',$facs->findAll(1));
+				$r->renderResponse($t->fetch('report_problem_facs_csv.tpl'));
+		}
+
+		public function getNoprobFaculty($r)
+		{
+				$t = new Dase_Template($r);
+				$facs = new Dase_DBO_Faculty($this->db);
+				$set = array();
+				foreach ($facs->findAll() as $f) {
+						if (1 != $f->has_problem) {
+								$set[] = $f;
+						}
+				}
+				$t->assign('facs',$set);
+				$r->renderResponse($t->fetch('report_noprob_facs.tpl'));
+		}
+
+		public function getNoprobFacultyCsv($r)
+		{
+				$t = new Dase_Template($r);
+				$facs = new Dase_DBO_Faculty($this->db);
+				$set = array();
+				foreach ($facs->findAll() as $f) {
+						if (1 != $f->has_problem) {
+								$set[] = $f;
+						}
+				}
+				$t->assign('facs',$set);
+				$r->renderResponse($t->fetch('report_noprob_facs_csv.tpl'));
 		}
 
 

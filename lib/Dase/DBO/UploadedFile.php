@@ -6,6 +6,7 @@ class Dase_DBO_UploadedFile extends Dase_DBO_Autogen_UploadedFile
 {
 
 		public $versions = array();
+		public $lines = array();
 
 		public function __get($key)
 		{
@@ -48,6 +49,14 @@ class Dase_DBO_UploadedFile extends Dase_DBO_Autogen_UploadedFile
 				$v->orderBy('timestamp DESC');
 				$this->versions = $v->findAll(1);
 				return $this->versions;
+		}
+
+		public function getLines()
+		{
+				$lines = new Dase_DBO_Line($this->db);
+				$lines->cv_id = $this->id;
+				$this->lines = $lines->findAll(1);
+				return $this->lines;
 		}
 
 		public function file2text($filename,$new_path,$mime)

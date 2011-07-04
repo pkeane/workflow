@@ -9,7 +9,8 @@
 <ul>
 	{foreach item=file from=$files}
 	<li>
-	<a href="faculty/{$file->eid}/file/{$file->id}">{$file->name}</a> | EID: {$file->eid} | [{$file->problem_note}]
+	<a href="faculty/{$file->eid}/file/{$file->id}">{$file->name}</a> | EID: {$file->eid} | [{$file->problem_note}] |
+	<a href="report/file/{$file->id}" class="edit">Edit CV</a>
 	</li>
 	{/foreach}
 

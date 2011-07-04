@@ -4,7 +4,7 @@
 <h1>Reports</h1>
 
 
-<h2>List of Faculty with a Problem ({$facs|@count})</h2>
+<h2>List of Faculty with NO Problem ({$facs|@count})</h2>
 
 <table id="faculty">
 	<tr>
@@ -13,12 +13,6 @@
 		<th>department</th>
 		<th>college</th>
 		<th>tenure status</th>
-		<!--
-		<th>CV</th>
-		-->
-		<th>
-			Problem Note
-		</th>
 	</tr>
 	{foreach item=fac from=$facs}
 
@@ -37,14 +31,6 @@
 		</td>
 		<td>
 			<a href="faculty/{$fac->eid}">{$fac->tenure}</a>
-		</td>
-		<!--
-		<td>
-			{if $fac->have_cv}&#10003;{/if}	
-		</td>
-		-->
-		<td>
-			{$fac->problem_note}
 		</td>
 	</tr>
 

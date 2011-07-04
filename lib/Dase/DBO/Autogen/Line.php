@@ -13,7 +13,7 @@ class Dase_DBO_Autogen_Line extends Dase_DBO
 {
 	public function __construct($db,$assoc = false) 
 	{
-		parent::__construct($db,'line', array('cv_id','version_id','faculty_eid','created_by','edited_by','sort_order','text','text_md5','revised_text','revised_text_md5','publication_type','is_peer','is_citation','is_section','is_creative','is_hidden','timestamp','c_authors','c_chapter','c_editor','c_endpage','c_isbn','c_issn','c_issue','c_pages','c_publication','c_publisher','c_publoc','c_startpage','c_subtitle','c_title','c_url','c_volume','c_year'));
+		parent::__construct($db,'line', array('cv_id','version_id','faculty_eid','created_by','edited_by','sort_order','text','text_md5','revised_text','revised_text_md5','annotation_text','publication_type','is_peer','is_citation','is_section','is_creative','is_hidden','timestamp','c_authors','c_chapter','c_editor','c_endpage','c_isbn','c_issn','c_issue','c_pages','c_publication','c_publisher','c_publoc','c_startpage','c_subtitle','c_title','c_url','c_volume','c_year','is_poss_dup_of','poss_dups_count','levenshtein','is_dup_of','problem_note'));
 		if ($assoc) {
 			foreach ( $assoc as $key => $value) {
 				$this->$key = $value;
