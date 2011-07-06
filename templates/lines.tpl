@@ -13,6 +13,7 @@
 	<a href="faculty/{$fac->eid}/file/{$file->id}">{$file->orig_name} (uploaded {$file->ago} by {$file->uploaded_by})</a> 
 </div>
 
+<p>lines last edited by: {$fac->lines_last_edited_by}</p>
 <div class="section lines" id="lines">
 	<h4>Created {$first_line->ago} by {$first_line->created_by} </h4>
 	<ul>
@@ -60,37 +61,46 @@
 
 		{if $line->revised_text}
 		<div class="line">{$line->revised_text}
-		<form class="hide" id="targetForm{$line->id}"  method="post" action="line/{$line->id}/text">
-			<textarea name="text" class="line_text">{$line->revised_text}</textarea>
-			<h4>{$line->poss_dups_count} possible duplicate(s)</h4>
-			<ul><li>no duplicates</li></ul>
-			<input type="submit" value="update">
-			<input type="submit" value="cancel" name="cancel">
-			<input type="submit" value="split into new line" name="split">
-			<input type="submit" value="merge with previous" name="merge">
-			<input type="submit" value="split into annotation" name="annotation">
-			<p>
-			original:<br>{$line->text}
-			{if $line->text != $line->revised_text}
-			<a href="line/{$line->id}/selfdiff" class="op">[diff]</a>
-			{/if}
-			</p>
-		</form>
+			<form class="hide" id="targetForm{$line->id}"  method="post" action="line/{$line->id}/text">
+				<textarea name="text" class="line_text">{$line->revised_text}</textarea>
+				<h4>{$line->poss_dups_count} possible duplicate(s)</h4>
+				<ul><li>no duplicates</li></ul>
+				<input type="submit" value="update">
+				<input type="submit" value="cancel" name="cancel">
+				<input type="submit" value="split into new line" name="split">
+				<input type="submit" value="merge with previous" name="merge">
+				<input type="submit" value="split into annotation" name="annotation">
+				<p>
+				<a href="#" data-content="{$fac->lastname}, {$fac->initial}." class="insert">prepend author w/ first initial</a> |
+				<a href="#" data-content="{$fac->lastname}, {$fac->firstname}." class="insert">prepend author w/ first name</a>
+				</p>
+				<p>
+				original:<br>{$line->text}
+				{if $line->text != $line->revised_text}
+				<a href="line/{$line->id}/selfdiff" class="op">[diff]</a>
+				{/if}
+				</p>
+			</form>
 		</div> 
 		{else}
 		<div class="line">{$line->text} 
-		<form class="hide" id="targetForm{$line->id}"  method="post" action="line/{$line->id}/text">
-			<textarea name="text" class="line_text">{$line->text}</textarea>
-			<h4>{$line->poss_dups_count} possible duplicate(s)</h4>
-			<ul><li>no duplicates</li></ul>
-			<input type="submit" value="update">
-			<input type="submit" value="cancel" name="cancel">
-			<input type="submit" value="split into new line" name="split">
-			<input type="submit" value="merge with previous" name="merge">
-			<input type="submit" value="split into annotation" name="annotation">
-		</form>
+			<form class="hide" id="targetForm{$line->id}"  method="post" action="line/{$line->id}/text">
+				<textarea name="text" class="line_text">{$line->text}</textarea>
+				<h4>{$line->poss_dups_count} possible duplicate(s)</h4>
+				<ul><li>no duplicates</li></ul>
+				<input type="submit" value="update">
+				<input type="submit" value="cancel" name="cancel">
+				<input type="submit" value="split into new line" name="split">
+				<input type="submit" value="merge with previous" name="merge">
+				<input type="submit" value="split into annotation" name="annotation">
+				<p>
+				<a href="#" data-content="{$fac->lastname}, {$fac->initial}." class="insert">prepend author w/ first initial</a> |
+				<a href="#" data-content="{$fac->lastname}, {$fac->firstname}." class="insert">prepend author w/ first name</a>
+				</p>
+			</form>
 		</div> 
 		{/if}
+
 		<div class="clear"></div>
 		{if $line->annotation_text}
 		<div class="line">{$line->annotation_text} <a href="#" id="toggleAnnotForm{$line->id}" class="toggle">[edit annotation]</a></div>
@@ -102,22 +112,21 @@
 		{/if}
 
 		<!-- problem codes -->
-		<form class="hide" id="targetProblemForm{$line->id}" method="post" action="line/{$line->id}/problem">
-			<p>
-			<label>Problem Brief Description<span class="current">[{$line->problem_note}]</span></label>
-			<input type="text" name="problem_note" value="{$line->problem_note}">
-			<br>
-			<select name="problem_code">
-				<option>problem codes:</option>
-				<option>PENDING</option>
-				<option>AUTHOR_ORDER</option>
-				<option>SUB_SUPER</option>
-				<option>DERIVATIVE</option>
-			</select>
-			</p>
-			<input type="submit" value="flag problem">
-		</form>
-
+			<form class="hide" id="targetProblemForm{$line->id}" method="post" action="line/{$line->id}/problem">
+				<p>
+				<label>Problem Brief Description<span class="current">[{$line->problem_note}]</span></label>
+				<input type="text" name="problem_note" value="{$line->problem_note}">
+				<br>
+				<select name="problem_code">
+					<option>problem codes:</option>
+					<option>PENDING</option>
+					<option>AUTHOR_ORDER</option>
+					<option>SUB_SUPER</option>
+					<option>DERIVATIVE</option>
+				</select>
+				</p>
+				<input type="submit" value="flag problem">
+			</form>
 
 		</li>
 		{/foreach}

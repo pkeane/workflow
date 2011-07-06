@@ -34,6 +34,13 @@ class Dase_DBO_Line extends Dase_DBO_Autogen_Line
 				return $v;
 		}
 
+		public function getDups()
+		{
+				$dup = new Dase_DBO_Line($this->db);
+				$dup->is_poss_dup_of = $this->id;
+				return $dup->findAll(1);
+		}
+
 		public function probCite()
 		{
 				$matches = array();

@@ -46,6 +46,9 @@
 	<a href="report/problem_files">list CVs with a reported problem</a>
 	</li>
 	<li>
+	<a href="report/pref_cv_multiple_versions">list preferred CVs with multiple versions</a>
+	</li>
+	<li>
 	<a href="report/misassigned_files">list CVs assigned to wrong EID</a>
 	</li>
 	<li>

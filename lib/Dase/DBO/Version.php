@@ -45,8 +45,13 @@ class Dase_DBO_Version extends Dase_DBO_Autogen_Version
 						$string = preg_replace('/\xe2\x80\x9d/','"',$string);
 						$string = preg_replace('/\xe2\x80\x94/','-',$string);
 
+						$string = preg_replace('/\xca\xbc/',"'",$string);
+						$string = preg_replace('/\xca\xbb/',"'",$string);
+
+
 						$l = new Dase_DBO_Line($this->db);
 						$l->text = trim($string);
+						$l->text = trim($l->text, "\x00..\x1F");
 						if ($l->text) {
 
 								$i++;

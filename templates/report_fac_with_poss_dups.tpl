@@ -13,6 +13,7 @@
 		<th>department</th>
 		<th>college</th>
 		<th>tenure status</th>
+		<th>possible dups count</th>
 	</tr>
 	{foreach item=fac from=$facs}
 
@@ -31,6 +32,9 @@
 		</td>
 		<td>
 			<a href="faculty/{$fac->eid}">{$fac->tenure}</a>
+		</td>
+		<td>
+			<a href="faculty/{$fac->eid}">{$fac->poss_dups}</a>
 		</td>
 	</tr>
 

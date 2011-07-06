@@ -50,7 +50,7 @@
 </form>
 
 {if $pref_versions|@count}
-<h2>versions marked preferred</h2>
+<h2>versions marked preferred (<a href="faculty/{$fac->eid}/preflines">view all</a>)</h2>
 
 
 <ul>
@@ -69,7 +69,7 @@
 {if $pref_versions|@count > 1}
 <form action="faculty/{$fac->eid}/dedup" method="post">
 	<input type="submit" value="run deduplication routine">
-	<a href="faculty/{$fac->eid}/poss_dups">View Possible Duplicates</a>
+	<a href="faculty/{$fac->eid}/poss_dups">View Possible Duplicates</a> (count: {$fac->dup_count})
 </form>
 {/if}
 	{/if}

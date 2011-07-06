@@ -21,6 +21,7 @@ $(document).ready(function() {
 	Dase.initCodeInsert();
 	Dase.initPossDups();
 	Dase.initShowDups();
+	Dase.initInsert();
 });
 
 Dase.initToggle = function(id) {
@@ -37,6 +38,14 @@ Dase.initHighlighting = function() {
 	$('#'+hl).addClass('highlight');
 };
 
+Dase.initInsert = function() {
+	$('#lines').find('a[class="insert"]').click(function() {
+		var content = $(this).attr('data-content');
+		var old = $(this).parents('form').find('textarea').val();
+		$(this).parents('form').find('textarea').val(content+' '+old);
+		return false;
+	});
+};
 
 Dase.initShowDups = function() {
 	$('#lines').find('a[class="show_line_form"]').click(function() {

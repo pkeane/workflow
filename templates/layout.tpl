@@ -10,6 +10,7 @@
 -->
 {/block}
 
+
 {block name="header"}
 <div class="header-inner">
 	<h1><a href="home">{$main_title}</a></h1>

@@ -6,6 +6,7 @@ class Dase_Handler_Faculty extends Dase_Handler
 				'{eid}' => 'faculty',
 				'{eid}/problem' => 'faculty_problem',
 				'{eid}/dedup' => 'dedup',
+				'{eid}/preflines' => 'preflines',
 				'{eid}/poss_dups' => 'poss_dups',
 				'{eid}/file/{id}' => 'file',
 				'{eid}/file/{id}/versioner' => 'versioner',
@@ -27,45 +28,9 @@ class Dase_Handler_Faculty extends Dase_Handler
 		{
 				$fac = new Dase_DBO_Faculty($this->db);
 				$fac->eid = $r->get('eid');
-
-				$np_lines = array();
-				foreach ($fac->getVersions() as $v) {
-						if (!$v->has_citations) {
-								$v->generateLines($this->user->eid);
-						}
-						if ($v->is_preferred) {
-								if ($v->isFromPrefCv()) {
-										$pref_lines = $v->getLines();
-								} else {
-										$np_lines = array_merge($np_lines,$v->getLines());
-								}
-						}
-				}
-
-				foreach ($pref_lines as $pref_line) {
-						foreach ($np_lines as $np_line) {
-								//ignore lines we know are dups
-								if (!$np_line->is_dup_of) {
-										if (trim($pref_line->text) == trim($np_line->text)) {
-												$np_line->is_dup_of = $pref_line->id;
-												$np_line->update();
-										} else {
-												if (strlen(trim($pref_line->text)) < 255 && strlen(trim($np_line->text)) < 255 ) {
-														$lev = levenshtein(trim($pref_line->text),trim($np_line->text));
-														if ($lev > 0 && $lev < 20) {
-																$np_line->is_poss_dup_of = $pref_line->id;
-																$np_line->levenshtein = $lev;
-																$np_line->update();
-
-																$pref_line->poss_dups_count += 1;
-																$pref_line->update();
-														}
-												}
-										}
-								}
-						}
-				}
-				$r->renderRedirect('faculty/'.$r->get('eid'));
+				$fac->findOne();
+				$fac->dedupLines($this->user->eid);
+				$r->renderRedirect('faculty/'.$fac->eid);
 		}
 
 		public function getPossDups($r)
@@ -76,26 +41,14 @@ class Dase_Handler_Faculty extends Dase_Handler
 				$t->assign('fac',$fac->findOne());
 				$lines = new Dase_DBO_Line($this->db);
 				$lines->faculty_eid = $fac->eid;
-				$fac_lines = $lines->findAll();
+				$lines->addWhere('poss_dups_count','0','>');
+				$fac_lines = $lines->findAll(1);
 
-				$pref_versions = new Dase_DBO_Version($this->db);
-				$pref_versions->faculty_eid = $fac->eid;
-				$pref_versions->addWhere('is_preferred',1,'=');
-				$pref_ids = array();
-				foreach ($pref_versions->findAll(1) as $pv) {
-						$pref_ids[] = $pv->id;
-				}
 
 				foreach ($fac_lines as $fline) {
-						$v_id = $fline->version_id;
-						//get ONLY lines from preferred versions
-						if (in_array($v_id,$pref_ids)) {
-								if ($fline->is_poss_dup_of) {
-										$fac_lines[$fline->is_poss_dup_of]->possible_dups[] = $fline;;
-								}
-						} else {
-								unset($fac_lines[$fline->id]);
-						}
+						$line = new Dase_DBO_Line($this->db);
+						$line->is_poss_dup_of = $fline->id;
+						$fline->possible_dups = $line->findAll(1);
 				}
 				$t->assign('lines',$fac_lines);
 				$r->renderResponse($t->fetch('fac_poss_dups.tpl'));
@@ -367,6 +320,7 @@ class Dase_Handler_Faculty extends Dase_Handler
 				$t = new Dase_Template($r);
 				$fac = new Dase_DBO_Faculty($this->db);
 				$fac->eid = $r->get('eid');
+				$fac->getDupCount();
 				$t->assign('fac',$fac->findOne());
 
 				$pref_versions = array();
@@ -393,5 +347,32 @@ class Dase_Handler_Faculty extends Dase_Handler
 				$r->renderResponse($t->fetch('faculty.tpl'));
 		}
 
+		public function getPreflines($r) 
+		{
+				$t = new Dase_Template($r);
+				$fac = new Dase_DBO_Faculty($this->db);
+				$fac->eid = $r->get('eid');
+				$t->assign('fac',$fac->findOne());
+
+				$pref_versions = array();
+				foreach ($fac->getVersions() as $v) {
+						if ($v->is_preferred) {
+								$v->getLines($r->get('show_hidden'));
+								if ( $v->isFromPrefCv() ) {
+										$t->assign('master',$v);
+								} else {
+										$pref_versions[] = $v;
+								}
+						}
+				}
+
+				$t->assign('show_hidden',$r->get('show_hidden'));
+				$t->assign('pref_versions',$pref_versions);
+
+				if (Dase_DBO_Watchlist::check($this->db,$this->user->eid,$fac->eid)) {
+						$t->assign('on_watchlist',1);
+				}
+				$r->renderResponse($t->fetch('faculty_preflines.tpl'));
+		}
 }
 

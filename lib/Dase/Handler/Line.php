@@ -183,6 +183,14 @@ class Dase_Handler_Line extends Dase_Handler
 		{
 				$line = new Dase_DBO_Line($this->db);
 				$line->load($r->get('id'));
+
+				//too much overhead??
+				$fac = new Dase_DBO_Faculty($this->db);
+				$fac->eid = $line->faculty_eid;
+				$fac->findOne();
+				$fac->lines_last_edited_by = $this->user->eid;
+				$fac->update();
+
 				$att = $r->get('attribute');
 				if ($line->hasMember($att)) {
 						$line->$att = $r->get('state');

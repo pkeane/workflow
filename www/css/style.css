@@ -399,11 +399,16 @@ p.prob_code {
 }
 
 a.diff_link {
-	font-size: 11px;
+	font-size: 10px;
 	color: #00c;
 }
 
-a.op {
-	font-size: 11px;
+a.op, a.insert {
+	font-size: 10px;
 	color: #00c;
+}
+
+ul.overflow {
+	max-height: 400px;
+	overflow: auto;
 }

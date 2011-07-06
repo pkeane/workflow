@@ -13,6 +13,7 @@ class Dase_Handler_Report extends Dase_Handler
 				'noprob_faculty' => 'noprob_faculty',
 				'faculty_no_pref_versions' => 'faculty_no_pref_versions',
 				'faculty_has_pref_versions' => 'faculty_has_pref_versions',
+				'pref_cv_multiple_versions' => 'pref_cv_multiple_versions',
 				'file/{id}' => 'file',
 		);
 
@@ -25,6 +26,26 @@ class Dase_Handler_Report extends Dase_Handler
 						$r->renderError(401);
 				}
 		}
+
+		public function getPrefCvMultipleVersions($r)
+		{
+				$t = new Dase_Template($r);
+				$file = new Dase_DBO_UploadedFile($this->db);
+				$file->is_preferred = 1;
+				$set = array();
+				foreach ($file->find() as $f) {
+						$f = clone($f);
+						$v = new Dase_DBO_Version($this->db);
+						$v->uploaded_file_id = $f->id;
+						$v->is_preferred = 1;
+						if ($v->findCount() > 1) {
+								$set[] = $f;
+						}
+				}
+				$t->assign('files',$set);
+				$r->renderResponse($t->fetch('report_problem_files.tpl'));
+		}
+
 
 		public function getFacultyNoPrefVersions($r)
 		{
@@ -90,21 +111,17 @@ class Dase_Handler_Report extends Dase_Handler
 		{
 				$t = new Dase_Template($r);
 				$faculty = new Dase_DBO_Faculty($this->db);
-				$faculty->orderBy('college, dept, lastname');
-
-				$poss = array();
-				$lines = new Dase_DBO_Line($this->db);
-				foreach ($lines->find() as $l) {
-						$l = clone($l);
-						if ($l->is_poss_dup_of) {
-								$poss[$l->faculty_eid] = 1;
-								unset($l);
-						}
-				}
+				//$faculty->orderBy('college, dept, lastname');
 
 				$set = array();
-				foreach ($faculty->findAll(1) as $fac) {
-						if (in_array($fac->eid,array_keys($poss))) {
+				$count = 0;
+				foreach ($faculty->findAll() as $fac) {
+						$line = new Dase_DBO_Line($this->db);
+						$line->addWhere('poss_dups_count',0,'>');
+						$line->faculty_eid = $fac->eid;
+						$count  = $line->findCount();
+						if ($count) {
+								$fac->poss_dups = $count;
 								$set[] = $fac;
 						}
 				}

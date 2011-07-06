@@ -18,64 +18,19 @@
 	<div class="orig">{$line->text}</div>
 	{foreach item=dupline from=$line->possible_dups}
 
-	{if $dupline->is_asserted_dup_of == $line->id}
-
-	<p class="dim">
-	{$dupline->text}
-	</p>
-	<p>
-	declared a duplicate (discard) {$dupline->dup_ago} by {$dupline->dup_asserted_by}
-	<a class="delete" href="line/{$dupline->id}/assertions">[UNDO]</a>
-	</p>
-
-	{elseif $dupline->is_asserted_better_dup_of == $line->id}
-
-	<p class="dim">
-	{$dupline->text}
-	</p>
-	<p>
-	declared a duplicate (save) {$dupline->dup_ago} by {$dupline->better_dup_asserted_by}
-	<a class="delete" href="line/{$dupline->id}/assertions">[UNDO]</a>
-	</p>
-
-	{elseif $dupline->is_asserted_not_dup_of == $line->id}
-
-	<p class="dim">
-	{$dupline->text}
-	</p>
-	<p>
-	declared NOT a duplicate {$dupline->nodup_ago} by {$dupline->not_dup_asserted_by}
-	<a class="delete" href="line/{$dupline->id}/assertions">[UNDO]</a>
-	</p>
-
-	{elseif $dupline->is_not_cite}
-
-	<p class="dim">
-	{$dupline->text}
-	</p>
-	<p>
-	declared NOT a citation 
-	<a class="delete" href="line/{$dupline->id}/assertions">[UNDO]</a>
-	</p>
-
-	{else}
 
 	<p>
 	{$dupline->text}
-	<p>
-	</p>
-	DUPLICATE: 
-	<a class="dup" href="line/{$dupline->id}/better_dup_assertion/{$line->id}">SAVE</a> |
-	<a class="dup" href="line/{$dupline->id}/dup_assertion/{$line->id}">DISCARD</a>
- 	| 
-	<a class="no_dup" href="line/{$dupline->id}/nodup_assertion/{$line->id}">NOT A DUPLICATE</a> |
-	<a class="not_cite" href="line/{$dupline->id}/not_cite_assertion">NOT A CITATION</a> 
 	<span class="lev">[levenshtein: {$dupline->levenshtein}]</span>
+	<a href="line/{$dupline->id}/diff" class="diff_link">[diff]</a>
 	</p>
-
-	{/if}
 
 	{/foreach}
+	{else}
+	<li>
+	<div class="orig">{$line->text}</div>
+	<p>has possible dup which is possible dup of another line (likely a dup w/ in master)</p>
+	</li>
 	{/if}
 	{/foreach}
 </ul>
